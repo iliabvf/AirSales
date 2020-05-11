@@ -1,10 +1,12 @@
 package net.iliabvf.javaio.model;
 
 public class User extends BaseModel {
-    String password;
+    private String password;
+    private String name;
 
     public User(Integer id, String name, String password) {
-        super(id, name);
+        super(id);
+        this.name = name;
         this.password = password;
     }
 
@@ -20,4 +22,13 @@ public class User extends BaseModel {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 }

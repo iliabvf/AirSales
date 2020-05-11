@@ -1,17 +1,11 @@
 package net.iliabvf.javaio.controller;
 
-import net.iliabvf.javaio.model.BaseModel;
 import net.iliabvf.javaio.model.User;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,10 +19,10 @@ public class UserController extends BaseController {
 
     private static Scanner scanner = new Scanner(System.in);
 
-    BaseModel findById(Integer id){
-        ArrayList<BaseModel> userArrayList = readAll();
+    User findById(Integer id){
+        ArrayList<User> userArrayList = readAll();
 
-        BaseModel foundUser = userArrayList.stream()
+        User foundUser = userArrayList.stream()
                 .filter(user -> (id.toString()).equals(user.getName()))
                 .findAny()
                 .orElse(null);
@@ -36,10 +30,10 @@ public class UserController extends BaseController {
         return foundUser;
     }
 
-    BaseModel findByName(String name){
-        ArrayList<BaseModel> userArrayList = readAll();
+    User findByName(String name){
+        ArrayList<User> userArrayList = readAll();
 
-        BaseModel foundUser = userArrayList.stream()
+        User foundUser = userArrayList.stream()
                 .filter(user -> (name).equalsIgnoreCase(user.getName()))
                 .findAny()
                 .orElse(null);
@@ -55,7 +49,7 @@ public class UserController extends BaseController {
         }
     }
 
-    boolean writeModelToFile(BaseModel model, Boolean emptyFile){
+    boolean writeModelToFile(User model, Boolean emptyFile){
         if (model.getId() == 0){
             Integer maxId;
 
@@ -88,7 +82,7 @@ public class UserController extends BaseController {
         return true;
     }
 
-    boolean writeModelListToFile(ArrayList<BaseModel> modelsList){
+    boolean writeModelListToFile(ArrayList<User> modelsList){
 
         ArrayList<String> dataLines = new ArrayList<>();
 
@@ -106,9 +100,9 @@ public class UserController extends BaseController {
         return true;
     }
 
-    List<BaseModel> readFile(String fileName) {
+    List<User> readFile(String fileName) {
         String SEPARATOR = ",";
-        ArrayList<BaseModel> list = new ArrayList<>();
+        ArrayList<User> list = new ArrayList<>();
 
         File myObj = new File(fileName);
         if (!myObj.exists()){
@@ -121,8 +115,6 @@ public class UserController extends BaseController {
                 return null;
             }
         }
-
-//        List<String> list = new ArrayList<>();
 
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
             ArrayList<String[]> list1 = (ArrayList<String[]>)stream
@@ -139,46 +131,19 @@ public class UserController extends BaseController {
             e.printStackTrace();
         }
 
-//        try {
-//            Path path = Paths.get(fileName);
-//            Reader reader = Files.newBufferedReader(path, Charset.forName("UTF-8"));
-//            BufferedReader bufferedReader = new BufferedReader(reader);
-//            if (bufferedReader.lines().count() == 0){
-//
-//                // Creating admin user
-//                User user = new User(ADMIN_USER_NAME, 0);
-//                if (!writeData(user, true)){
-//                    return list;
-//                }
-//
-//            }
-//                list = bufferedReader.lines().collect(Collectors.toList());
-//                return list;
-//
-//        } catch (NoSuchFileException e) {
-//            return list;
-//            //e.printStackTrace();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return list;
-//
-//        }
+        return list;
+    }
+
+    public ArrayList<User> readAll() {
+        ArrayList<User> list = (ArrayList)readFile(STRING_FILE_NAME);
 
         return list;
     }
 
-    @Override
-    public ArrayList<BaseModel> readAll() {
-        ArrayList<BaseModel> list = (ArrayList)readFile(STRING_FILE_NAME);
-
-        return list;
-    }
-
-    public void createAdminUser(ArrayList<BaseModel> userArrayList){
+    public void createAdminUser(ArrayList<User> userArrayList){
         Integer maxId = 0;
-        BaseModel maxIdModel = userArrayList.stream()
-                    .max(Comparator.comparing(BaseModel::getId))
+        User maxIdModel = userArrayList.stream()
+                    .max(Comparator.comparing(User::getId))
                     .orElse(null);
 
         if (maxIdModel == null){
@@ -217,8 +182,8 @@ public class UserController extends BaseController {
 
     }
 
-    public void checkSetAdminPassword(ArrayList<BaseModel> userArrayList){
-        BaseModel adminUser = null;
+    public void checkSetAdminPassword(ArrayList<User> userArrayList){
+        User adminUser = null;
 
         while (adminUser == null){
             adminUser = userArrayList.stream()
@@ -246,7 +211,7 @@ public class UserController extends BaseController {
 
     }
 
-    public void doLogin(ArrayList<BaseModel> userArrayList){
+    public void doLogin(ArrayList<User> userArrayList){
         while (true){
             String login = "";
             String password = "";
@@ -264,7 +229,7 @@ public class UserController extends BaseController {
             }
             final String login1 = login;
             final String password1 = password;
-            BaseModel foundUser = userArrayList.stream()
+            User foundUser = userArrayList.stream()
                     .filter(user -> (login1.equalsIgnoreCase(user.getName())))
                     .findAny()
                     .orElse(null);

@@ -1,9 +1,5 @@
 package net.iliabvf.javaio.model;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 public enum TicketType {
 
     ECONOMY(0),

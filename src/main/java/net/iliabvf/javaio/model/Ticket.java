@@ -7,8 +7,8 @@ public class Ticket extends BaseModel {
     private String date;
     private Route route;
 
-    public Ticket(Integer id, String name, TicketType ticketType, String date, Route route) {
-        super(id, name);
+    public Ticket(Integer id, TicketType ticketType, String date, Route route) {
+        super(id);
         this.ticketType = ticketType;
         this.date = date;
         this.route = route;
@@ -40,7 +40,22 @@ public class Ticket extends BaseModel {
 
     @Override
     public String toString() {
-        return id.toString() + "," + name + "," + ticketType.getNumVal() + "," + date + "," + route.getId();
+        return id.toString() + "," + ticketType.getNumVal() + "," + date + "," + route.getId();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Ticket ticket = (Ticket)o;
+        return id == ticket.getId()
+                && ticketType.equals(ticket.getTicketType())
+                && date.equals(ticket.getDate())
+                && route.equals(ticket.getRoute());
+
+    }
 }
